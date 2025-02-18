@@ -1,8 +1,6 @@
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.*;
 
 class Patient {
     int id;
@@ -61,19 +59,14 @@ public class HospitalManagementSystem {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Hospital Management System");
-        frame.setSize(400, 400);
+        frame.setSize(500, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        JPanel panel = new JPanel();
-        frame.add(panel);
-        placeComponents(panel);
-        
-        frame.setVisible(true);
-    }
+        frame.setLocationRelativeTo(null);
 
-    private static void placeComponents(JPanel panel) {
-        panel.setLayout(new GridLayout(6, 1));
-        
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(6, 1, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
         JButton addPatientButton = new JButton("Add Patient");
         JButton addDoctorButton = new JButton("Add Doctor");
         JButton scheduleAppointmentButton = new JButton("Schedule Appointment");
@@ -81,13 +74,26 @@ public class HospitalManagementSystem {
         JButton viewDoctorsButton = new JButton("View Doctors");
         JButton viewAppointmentsButton = new JButton("View Appointments");
 
+        
+
+        Font buttonFont = new Font("Arial", Font.ITALIC, 14); 
+        addPatientButton.setFont(buttonFont);
+        addDoctorButton.setFont(buttonFont);
+        scheduleAppointmentButton.setFont(buttonFont);
+        viewPatientsButton.setFont(buttonFont);
+        viewDoctorsButton.setFont(buttonFont);
+        viewAppointmentsButton.setFont(buttonFont);
+
         panel.add(addPatientButton);
         panel.add(addDoctorButton);
         panel.add(scheduleAppointmentButton);
         panel.add(viewPatientsButton);
         panel.add(viewDoctorsButton);
         panel.add(viewAppointmentsButton);
-        
+
+        frame.add(panel);
+        frame.setVisible(true);
+
         addPatientButton.addActionListener(e -> addPatient());
         addDoctorButton.addActionListener(e -> addDoctor());
         scheduleAppointmentButton.addActionListener(e -> scheduleAppointment());
@@ -97,27 +103,48 @@ public class HospitalManagementSystem {
     }
 
     private static void addPatient() {
-        int id = Integer.parseInt(JOptionPane.showInputDialog("Enter Patient ID:"));
-        String name = JOptionPane.showInputDialog("Enter Name:");
-        int age = Integer.parseInt(JOptionPane.showInputDialog("Enter Age:"));
-        String disease = JOptionPane.showInputDialog("Enter Disease:");
-        patients.add(new Patient(id, name, age, disease));
-        JOptionPane.showMessageDialog(null, "Patient added successfully!");
+        try {
+            int id = Integer.parseInt(JOptionPane.showInputDialog("Enter Patient ID:"));
+            String name = JOptionPane.showInputDialog("Enter Name:");
+            int age = Integer.parseInt(JOptionPane.showInputDialog("Enter Age:"));
+            String disease = JOptionPane.showInputDialog("Enter Disease:");
+            if (name == null || disease == null || name.trim().isEmpty() || disease.trim().isEmpty()) {
+                throw new IllegalArgumentException("Fields cannot be empty.");
+            }
+            patients.add(new Patient(id, name, age, disease));
+            JOptionPane.showMessageDialog(null, "Patient added successfully!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Invalid input. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private static void addDoctor() {
-        int id = Integer.parseInt(JOptionPane.showInputDialog("Enter Doctor ID:"));
-        String name = JOptionPane.showInputDialog("Enter Name:");
-        String specialization = JOptionPane.showInputDialog("Enter Specialization:");
-        doctors.add(new Doctor(id, name, specialization));
-        JOptionPane.showMessageDialog(null, "Doctor added successfully!");
+        try {
+            int id = Integer.parseInt(JOptionPane.showInputDialog("Enter Doctor ID:"));
+            String name = JOptionPane.showInputDialog("Enter Name:");
+            String specialization = JOptionPane.showInputDialog("Enter Specialization:");
+            if (name == null || specialization == null || name.trim().isEmpty() || specialization.trim().isEmpty()) {
+                throw new IllegalArgumentException("Fields cannot be empty.");
+            }
+            doctors.add(new Doctor(id, name, specialization));
+            JOptionPane.showMessageDialog(null, "Doctor added successfully!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Invalid input. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private static void scheduleAppointment() {
-        int patientId = Integer.parseInt(JOptionPane.showInputDialog("Enter Patient ID:"));
-        int doctorId = Integer.parseInt(JOptionPane.showInputDialog("Enter Doctor ID:"));
-        String date = JOptionPane.showInputDialog("Enter Appointment Date (YYYY-MM-DD):");
-        appointments.add(new Appointment(patientId, doctorId, date));
-        JOptionPane.showMessageDialog(null, "Appointment scheduled successfully!");
+        try {
+            int patientId = Integer.parseInt(JOptionPane.showInputDialog("Enter Patient ID:"));
+            int doctorId = Integer.parseInt(JOptionPane.showInputDialog("Enter Doctor ID:"));
+            String date = JOptionPane.showInputDialog("Enter Appointment Date (YYYY-MM-DD):");
+            if (date == null || date.trim().isEmpty()) {
+                throw new IllegalArgumentException("Date cannot be empty.");
+            }
+            appointments.add(new Appointment(patientId, doctorId, date));
+            JOptionPane.showMessageDialog(null, "Appointment scheduled successfully!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Invalid input. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
